@@ -8,7 +8,7 @@ Tudo o que o painel do desenvolvedor pede, pronto para copiar e colar.
 |---|---|
 | Pacote (.zip) | `store/kbpad-1.1.0.zip` (gere com o comando no fim deste arquivo) |
 | Ícone da loja 128x128 | `icons/icon128.png` |
-| Capturas de tela 1280x800 | `store/images/screenshot-1-mapeamento.jpg`, `screenshot-2-troca-rapida.jpg`, `screenshot-3-configuracao.jpg` |
+| Capturas de tela 1280x800 | `store/images/screenshot-1-mapeamento.jpg`, `screenshot-2-troca-rapida.jpg`, `screenshot-3-configuracao-pt.jpg` (use `-en.jpg` na versão em inglês) |
 | Bloco promocional pequeno 440x280 | `store/images/promo-pequeno-440x280.jpg` |
 | Bloco promocional marquee 1400x560 (opcional) | `store/images/promo-marquee-1400x560.jpg` |
 
@@ -40,11 +40,41 @@ RECURSOS
 • Troca rápida (F9): alterna entre dois presets na hora, por exemplo um para andar e outro para dirigir.
 • Ajuste de sensibilidade, saída mínima (vence a zona morta do jogo), suavização e inversão do eixo Y.
 • Teclas de ligar e de troca configuráveis.
+• Interface em português e inglês.
 
 PRIVACIDADE
 Nenhum dado é coletado ou enviado. Suas configurações ficam só no seu navegador. Sem anúncios, sem analytics, sem código remoto.
 
-Observação: funciona em serviços de jogos que rodam no navegador e leem o controle pela Gamepad API. Não funciona em aplicativos instalados fora do Chrome.
+Observação: funciona em serviços de jogos que rodam no navegador e leem o controle pela Gamepad API. Não funciona em aplicativos instalados fora do Chrome. Depois de trocar o preset principal, recarregue a aba do jogo.
+```
+
+## Versão em inglês (adicione o idioma English no painel)
+
+O nome e o resumo já vêm traduzidos do pacote (pasta `_locales`). No painel, em **Detalhes da loja**, adicione o idioma **English** e cole:
+
+**Description:**
+
+```
+Play cloud games in Chrome without a physical controller. KB Pad creates a standard virtual gamepad and turns your keyboard and mouse into its buttons and sticks.
+
+HOW IT WORKS
+• Open the game in your browser and press F8 to turn it on.
+• Click the screen to capture the mouse: movement becomes the right stick.
+• WASD becomes the left stick; mouse buttons become the triggers.
+• An "ON" badge on the icon shows when it is active.
+
+FEATURES
+• Full mapping: A, B, X, Y, LB, RB, LT, RT, Back, Start, L3, R3, D-pad and Home.
+• Per-game presets: create, copy, rename and delete. Ships with ready presets for action, racing, RPG and soccer games.
+• Quick switch (F9): instantly toggle between two presets, e.g. one for walking and one for driving.
+• Adjustable sensitivity, minimum output (beats the game deadzone), smoothing and Y-axis inversion.
+• Configurable toggle and switch keys.
+• Interface in English and Brazilian Portuguese.
+
+PRIVACY
+No data is collected or sent. Your settings stay in your browser. No ads, no analytics, no remote code.
+
+Note: works with browser-based game services that read controllers through the Gamepad API. Does not work with apps installed outside Chrome. After changing the main preset, reload the game tab.
 ```
 
 ## Aba "Práticas de privacidade"
@@ -75,7 +105,7 @@ https://github.com/ailtonandrade/kbpad-extension/blob/main/PRIVACY.md
 Na pasta da extensão, no PowerShell:
 
 ```powershell
-Compress-Archive -Force -DestinationPath store\kbpad-1.1.0.zip -Path manifest.json,background.js,content.js,defaults.js,inject.js,options.html,options.js,icons
+Compress-Archive -Force -DestinationPath store\kbpad-1.1.0.zip -Path manifest.json,background.js,content.js,defaults.js,i18n.js,inject.js,options.html,options.js,icons,_locales
 ```
 
 ## Imagens

@@ -81,7 +81,7 @@ const KBPAD_BUILTIN = {
 const KBPAD_BUILTIN_VERSION = 2;
 
 async function kbpadLoad() {
-  const s = await chrome.storage.sync.get(['presets', 'active', 'toggleKey', 'switchKey', 'builtinVersion', 'config']);
+  const s = await chrome.storage.sync.get(['presets', 'active', 'toggleKey', 'switchKey', 'lang', 'builtinVersion', 'config']);
   const presets = s.presets || structuredClone(KBPAD_BUILTIN);
   if (s.config && !s.presets) presets['Meu (antigo)'] = kbpadMerge(s.config);
   if (s.presets && (s.builtinVersion || 1) < 2) {
@@ -93,6 +93,7 @@ async function kbpadLoad() {
     presets,
     active,
     toggleKey: s.toggleKey || (s.config && s.config.toggleKey) || KBPAD_DEFAULTS.toggleKey,
-    switchKey: s.switchKey || 'F9'
+    switchKey: s.switchKey || 'F9',
+    lang: s.lang || kbpadDefaultLang()
   };
 }

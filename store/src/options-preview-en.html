@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><base href="../../"><script>window.chrome={storage:{sync:{get:async()=>({active:"GTA V",lang:"en"}),set:(o,cb)=>cb&&cb()}},runtime:{}};</script>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KB Pad - Configuração</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #0b1020; --panel: #151b2e; --line: #262f4a; --text: #e5e7eb; --muted: #9ca3af;
+    --accent: #7c3aed; --key: #f9fafb; --keyshadow: #9ca3af;
+  }
+  body {
+    font: 14px "Segoe UI", system-ui, sans-serif; color: var(--text); margin: 0;
+    background: radial-gradient(circle at 15% 0%, #2e1065 0%, var(--bg) 45%) fixed, var(--bg);
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 28px 16px 48px; }
+  header { display: flex; align-items: center; gap: 14px; }
+  header img { width: 44px; height: 44px; }
+  h1 { font-size: 22px; margin: 0; }
+  h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: #c4b5fd; margin: 0 0 12px; }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; margin-top: 16px; }
+  .pair { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--line); gap: 12px; }
+  #bindings { columns: 2; column-gap: 36px; }
+  #bindings .pair { break-inside: avoid; }
+  button, select { font: inherit; color: var(--text); background: #1f2740; border: 1px solid var(--line); border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+  button:hover, select:hover { border-color: var(--accent); }
+  button:disabled { opacity: .4; cursor: default; }
+  button.bind {
+    min-width: 120px; background: var(--key); color: #111827; font-weight: 700; border: 0;
+    box-shadow: 0 3px 0 var(--keyshadow); padding: 6px 12px; margin-bottom: 3px;
+  }
+  button.bind.waiting { background: var(--accent); color: #fff; box-shadow: 0 3px 0 #4c1d95; }
+  .row { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+  .row label { width: 280px; color: var(--muted); }
+  .row select { flex: 1; }
+  .row input[type=range] { flex: 1; accent-color: var(--accent); }
+  .row span { width: 28px; text-align: right; }
+  .hint { color: var(--muted); line-height: 1.5; margin: 10px 0 0; }
+  footer { margin-top: 16px; }
+  #status { margin-left: 10px; color: #86efac; }
+  @media (max-width: 640px) {
+    #bindings { columns: 1; }
+    .row { flex-wrap: wrap; }
+    .row label { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header><img src="icons/icon128.png" alt=""><h1 data-i18n="title"></h1><select id="lang" style="margin-left:auto" aria-label="Idioma / Language"></select></header>
+  <p class="hint" data-i18n="intro"></p>
+
+  <section>
+    <h2 data-i18n="presetSection"></h2>
+    <div class="row"><select id="preset"></select>
+      <button id="new" data-i18n="newPreset"></button><button id="rename" data-i18n="rename"></button><button id="delete" data-i18n="delete"></button></div>
+    <div class="row"><label data-i18n="quickSwitchTo"></label><select id="alt"></select></div>
+    <p class="hint" data-i18n="presetHint"></p>
+  </section>
+
+  <section>
+    <h2 data-i18n="general"></h2>
+    <div class="pair"><span data-i18n="toggle"></span><button class="bind" data-target="__toggle"></button></div>
+    <div class="pair"><span data-i18n="quickSwitchKey"></span><button class="bind" data-target="__switch"></button></div>
+    <div class="row"><label data-i18n="sensitivity"></label><input type="range" id="sensitivity" min="1" max="60"><span id="sensitivity-v"></span></div>
+    <div class="row"><label data-i18n="deadzone"></label><input type="range" id="deadzone" min="0" max="50"><span id="deadzone-v"></span></div>
+    <div class="row"><label data-i18n="smoothing"></label><input type="range" id="smoothing" min="0" max="90"><span id="smoothing-v"></span></div>
+    <div class="row"><label data-i18n="invertY"></label><input type="checkbox" id="invertY"></div>
+  </section>
+
+  <section>
+    <h2 data-i18n="mapping"></h2>
+    <div id="bindings"></div>
+  </section>
+
+  <footer><button id="reset"></button><span id="status"></span></footer>
+</main>
+<script src="i18n.js"></script>
+<script src="defaults.js"></script>
+<script src="options.js"></script>
+</body>
+</html>

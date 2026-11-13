@@ -55,6 +55,8 @@
   }
 
   let hud, hudTimer;
+  const fmt = (tpl, vars) => tpl.replace(/\{(\w+)\}/g, (_, k) => vars[k] ?? '');
+
   function showHud(text) {
     if (!document.body) return;
     if (!hud) {
@@ -79,11 +81,11 @@
     window.postMessage({ __kbpad: 'state', enabled: on }, '*');
     if (on) {
       fireGamepadEvent('gamepadconnected');
-      showHud(`🎮 KB Pad LIGADO — ${cfg.presetName} — clique na tela para capturar o mouse (${cfg.toggleKey} desliga)`);
+      showHud(fmt(cfg.msgs.hudOn, { name: cfg.presetName, key: cfg.toggleKey }));
     } else {
       if (document.pointerLockElement) document.exitPointerLock();
       fireGamepadEvent('gamepaddisconnected');
-      showHud(`KB Pad desligado (${cfg.toggleKey} liga)`);
+      showHud(fmt(cfg.msgs.hudOff, { key: cfg.toggleKey }));
     }
   }
 
@@ -112,7 +114,7 @@
       swallow(e);
       if (e.repeat) return;
       if (cfg.altName) window.postMessage({ __kbpad: 'switch' }, '*');
-      else showHud(`"${cfg.presetName}" não tem preset de troca rápida`);
+      else showHud(fmt(cfg.msgs.hudNoAlt, { name: cfg.presetName }));
       return;
     }
     if (enabled && mapped.has(e.code)) {

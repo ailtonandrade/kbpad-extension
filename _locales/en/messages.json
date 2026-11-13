@@ -1,0 +1,11 @@
+{
+  "extName": {
+    "message": "KB Pad - Keyboard & Mouse as Controller"
+  },
+  "extDescription": {
+    "message": "Use keyboard and mouse as a gamepad in browser cloud gaming, with presets and quick switching."
+  },
+  "actionTitle": {
+    "message": "KB Pad - settings"
+  }
+}

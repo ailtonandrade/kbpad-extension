@@ -9,10 +9,11 @@ function sendConfig() {
 }
 
 function build(announce) {
-  const { presets, toggleKey, switchKey } = kbpadState;
+  const { presets, toggleKey, switchKey, lang } = kbpadState;
   const p = presets[current];
   const alt = p.alt && presets[p.alt] ? p.alt : '';
-  kbpadCfg = { ...kbpadMerge(p), toggleKey, switchKey, presetName: current, altName: alt, announce: !!announce };
+  kbpadCfg = { ...kbpadMerge(p), toggleKey, switchKey, presetName: kbpadPresetLabel(lang, current), altName: alt, announce: !!announce,
+    msgs: { hudOn: kbpadT(lang, 'hudOn'), hudOff: kbpadT(lang, 'hudOff'), hudNoAlt: kbpadT(lang, 'hudNoAlt') } };
   sendConfig();
 }
 

@@ -1,20 +1,17 @@
 let state = null;
 let waiting = null;
 
-const MOUSE_NAMES = { Mouse0: 'Mouse esquerdo', Mouse1: 'Mouse meio', Mouse2: 'Mouse direito', Mouse3: 'Mouse voltar', Mouse4: 'Mouse avançar' };
-const KEY_NAMES = {
-  Space: 'Espaço', ShiftLeft: 'Shift esq.', ShiftRight: 'Shift dir.', ControlLeft: 'Ctrl esq.', ControlRight: 'Ctrl dir.',
-  AltLeft: 'Alt esq.', AltRight: 'Alt dir.', ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→',
-  Backquote: "'", Quote: '~', Enter: 'Enter', Tab: 'Tab'
-};
+const t = (key, vars) => kbpadT(state.lang, key, vars);
+const dict = () => KBPAD_I18N[state.lang] || KBPAD_I18N.en;
+const presetLabel = (name) => kbpadPresetLabel(state.lang, name);
 const label = (code) =>
-  !code ? '— nenhum —' : MOUSE_NAMES[code] || KEY_NAMES[code] || code.replace(/^Key|^Digit|^Numpad/, '');
+  !code ? t('none') : dict().keys[code] || KBPAD_COMMON_KEYS[code] || code.replace(/^Key|^Digit|^Numpad/, '');
 const cfg = () => state.presets[state.active];
 
 function save() {
-  chrome.storage.sync.set({ presets: state.presets, active: state.active, toggleKey: state.toggleKey, switchKey: state.switchKey, builtinVersion: KBPAD_BUILTIN_VERSION }, () => {
+  chrome.storage.sync.set({ presets: state.presets, active: state.active, toggleKey: state.toggleKey, switchKey: state.switchKey, lang: state.lang, builtinVersion: KBPAD_BUILTIN_VERSION }, () => {
     const s = document.getElementById('status');
-    s.textContent = chrome.runtime.lastError ? 'Erro: ' + chrome.runtime.lastError.message : 'Salvo';
+    s.textContent = chrome.runtime.lastError ? t('error') + chrome.runtime.lastError.message : t('saved');
     setTimeout(() => (s.textContent = ''), 1500);
   });
 }
@@ -36,27 +33,34 @@ function setBinding(target, code) {
 }
 
 function render() {
+  document.documentElement.lang = state.lang === 'pt' ? 'pt-BR' : 'en';
+  document.querySelectorAll('[data-i18n]').forEach((el) => (el.textContent = t(el.dataset.i18n)));
+  const lang = document.getElementById('lang');
+  lang.innerHTML = '';
+  for (const code of Object.keys(KBPAD_I18N)) lang.add(new Option(KBPAD_I18N[code].langName, code, false, code === state.lang));
+  lang.onchange = () => { state.lang = lang.value; save(); render(); };
+
   const sel = document.getElementById('preset');
   sel.innerHTML = '';
-  for (const name of Object.keys(state.presets)) sel.add(new Option(name, name, false, name === state.active));
+  for (const name of Object.keys(state.presets)) sel.add(new Option(presetLabel(name), name, false, name === state.active));
   sel.onchange = () => { state.active = sel.value; save(); render(); };
   const alt = document.getElementById('alt');
   alt.innerHTML = '';
-  alt.add(new Option('— nenhum —', ''));
+  alt.add(new Option(t('none'), ''));
   for (const name of Object.keys(state.presets)) {
-    if (name !== state.active) alt.add(new Option(name, name, false, name === cfg().alt));
+    if (name !== state.active) alt.add(new Option(presetLabel(name), name, false, name === cfg().alt));
   }
   alt.onchange = () => { cfg().alt = alt.value; save(); };
   document.getElementById('delete').disabled = Object.keys(state.presets).length <= 1;
   document.getElementById('reset').textContent =
-    KBPAD_BUILTIN[state.active] ? `Restaurar "${state.active}" de fábrica` : 'Restaurar padrão';
+    KBPAD_BUILTIN[state.active] ? t('resetBuiltin', { name: presetLabel(state.active) }) : t('resetDefault');
 
   const list = document.getElementById('bindings');
   list.innerHTML = '';
   for (const [key, name] of KBPAD_TARGETS) {
     const div = document.createElement('div');
     div.className = 'pair';
-    div.innerHTML = `<span>${name}</span><button class="bind" data-target="${key}"></button>`;
+    div.innerHTML = `<span>${dict().targets[key] || name}</span><button class="bind" data-target="${key}"></button>`;
     list.appendChild(div);
   }
   document.querySelectorAll('button.bind').forEach((btn) => {
@@ -65,7 +69,7 @@ function render() {
       e.stopPropagation();
       if (waiting) return;
       waiting = btn.dataset.target;
-      btn.textContent = 'Aperte uma tecla…';
+      btn.textContent = t('pressKey');
       btn.classList.add('waiting');
     };
   });
@@ -110,7 +114,7 @@ window.addEventListener('mousedown', (e) => {
 window.addEventListener('contextmenu', (e) => { if (waiting) e.preventDefault(); });
 
 document.getElementById('new').onclick = () => {
-  const name = prompt('Nome do novo preset (copia o atual):', state.active + ' (meu)');
+  const name = prompt(t('newPrompt'), presetLabel(state.active) + t('mineSuffix'));
   if (!name || state.presets[name]) return;
   state.presets[name] = structuredClone(cfg());
   state.active = name;
@@ -119,7 +123,7 @@ document.getElementById('new').onclick = () => {
 };
 
 document.getElementById('rename').onclick = () => {
-  const name = prompt('Novo nome:', state.active);
+  const name = prompt(t('renamePrompt'), presetLabel(state.active));
   if (!name || name === state.active || state.presets[name]) return;
   state.presets[name] = cfg();
   delete state.presets[state.active];
@@ -130,7 +134,7 @@ document.getElementById('rename').onclick = () => {
 };
 
 document.getElementById('delete').onclick = () => {
-  if (!confirm(`Excluir o preset "${state.active}"?`)) return;
+  if (!confirm(t('deleteConfirm', { name: presetLabel(state.active) }))) return;
   delete state.presets[state.active];
   state.active = Object.keys(state.presets)[0];
   save();

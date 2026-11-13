@@ -14,7 +14,8 @@ Extensão do Chrome que cria um controle virtual (Gamepad API, layout padrão) e
 
 - **F8** liga/desliga na aba do jogo (selo **ON** no ícone). Clique na tela para capturar o mouse.
 - **F9** alterna para o preset de troca rápida (ex.: a pé ↔ veículos).
-- Clique no ícone da extensão para configurar presets, teclas e sensibilidade.
+- Clique no ícone da extensão para configurar presets, teclas, sensibilidade e idioma (português ou inglês).
+- Depois de trocar o preset principal, recarregue (F5) a aba do jogo. A troca rápida (F9) vale na hora.
 
 ## Publicação
 

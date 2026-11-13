@@ -48,35 +48,35 @@
 </head>
 <body>
 <main>
-  <header><img src="icons/icon128.png" alt=""><h1>KB Pad: teclado e mouse como controle</h1></header>
-  <p class="hint">Na página do jogo, aperte a tecla de ligar e clique na tela para capturar o mouse; ele vira o analógico direito.
-    Para mapear, clique num botão e aperte a tecla ou o botão do mouse. Esc cancela, Backspace limpa.</p>
+  <header><img src="icons/icon128.png" alt=""><h1 data-i18n="title"></h1><select id="lang" style="margin-left:auto" aria-label="Idioma / Language"></select></header>
+  <p class="hint" data-i18n="intro"></p>
 
   <section>
-    <h2>Preset do jogo</h2>
+    <h2 data-i18n="presetSection"></h2>
     <div class="row"><select id="preset"></select>
-      <button id="new">Novo (cópia)</button><button id="rename">Renomear</button><button id="delete">Excluir</button></div>
-    <div class="row"><label>Troca rápida para</label><select id="alt"></select></div>
-    <p class="hint">O preset selecionado é o que vale no jogo. Com o KB Pad ligado, a tecla de troca rápida alterna entre ele e o preset de troca (ex.: a pé ↔ veículos).</p>
+      <button id="new" data-i18n="newPreset"></button><button id="rename" data-i18n="rename"></button><button id="delete" data-i18n="delete"></button></div>
+    <div class="row"><label data-i18n="quickSwitchTo"></label><select id="alt"></select></div>
+    <p class="hint" data-i18n="presetHint"></p>
   </section>
 
   <section>
-    <h2>Geral</h2>
-    <div class="pair"><span>Liga/desliga</span><button class="bind" data-target="__toggle"></button></div>
-    <div class="pair"><span>Troca rápida de preset</span><button class="bind" data-target="__switch"></button></div>
-    <div class="row"><label>Sensibilidade do mouse</label><input type="range" id="sensitivity" min="1" max="60"><span id="sensitivity-v"></span></div>
-    <div class="row"><label>Saída mínima (vence a zona morta do jogo)</label><input type="range" id="deadzone" min="0" max="50"><span id="deadzone-v"></span></div>
-    <div class="row"><label>Suavização</label><input type="range" id="smoothing" min="0" max="90"><span id="smoothing-v"></span></div>
-    <div class="row"><label>Inverter eixo Y</label><input type="checkbox" id="invertY"></div>
+    <h2 data-i18n="general"></h2>
+    <div class="pair"><span data-i18n="toggle"></span><button class="bind" data-target="__toggle"></button></div>
+    <div class="pair"><span data-i18n="quickSwitchKey"></span><button class="bind" data-target="__switch"></button></div>
+    <div class="row"><label data-i18n="sensitivity"></label><input type="range" id="sensitivity" min="1" max="60"><span id="sensitivity-v"></span></div>
+    <div class="row"><label data-i18n="deadzone"></label><input type="range" id="deadzone" min="0" max="50"><span id="deadzone-v"></span></div>
+    <div class="row"><label data-i18n="smoothing"></label><input type="range" id="smoothing" min="0" max="90"><span id="smoothing-v"></span></div>
+    <div class="row"><label data-i18n="invertY"></label><input type="checkbox" id="invertY"></div>
   </section>
 
   <section>
-    <h2>Mapeamento</h2>
+    <h2 data-i18n="mapping"></h2>
     <div id="bindings"></div>
   </section>
 
-  <footer><button id="reset">Restaurar padrão</button><span id="status"></span></footer>
+  <footer><button id="reset"></button><span id="status"></span></footer>
 </main>
+<script src="i18n.js"></script>
 <script src="defaults.js"></script>
 <script src="options.js"></script>
 </body>
