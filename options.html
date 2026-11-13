@@ -5,7 +5,7 @@
 <title>KB Pad - Configuração</title>
 <style>
   :root { color-scheme: light dark; }
-  body { font: 14px system-ui, sans-serif; max-width: 720px; margin: 24px auto; padding: 0 16px; }
+  body { font: 14px system-ui, sans-serif; max-width: 760px; margin: 24px auto; padding: 0 16px; }
   h1 { font-size: 20px; }
   h2 { font-size: 16px; margin-top: 28px; }
   table { width: 100%; border-collapse: collapse; }
@@ -24,6 +24,11 @@
   <p class="hint">Na página do jogo, aperte a tecla de ligar e clique na tela para capturar o mouse.
     O mouse vira o analógico direito. Clique num botão abaixo e aperte a tecla ou o botão do mouse desejado.
     Esc cancela, Backspace limpa.</p>
+
+  <h2>Preset do jogo</h2>
+  <div class="row"><select id="preset" style="flex:1;padding:6px"></select>
+    <button id="new">Novo (cópia)</button><button id="rename">Renomear</button><button id="delete">Excluir</button></div>
+  <p class="hint">O preset selecionado é o que vale no jogo. Os de fábrica podem ser editados e restaurados.</p>
 
   <h2>Geral</h2>
   <table><tbody><tr><td>Liga/desliga</td><td><button class="bind" data-target="__toggle"></button></td></tr></tbody></table>

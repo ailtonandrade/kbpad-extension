@@ -33,3 +33,49 @@ function kbpadMerge(stored) {
     bindings: { ...KBPAD_DEFAULTS.bindings, ...(stored && stored.bindings) }
   };
 }
+
+const kbpadPreset = (bindings, extra = {}) => ({ ...kbpadMerge({ ...extra, bindings }), toggleKey: undefined });
+
+// Mapeamentos seguem os atalhos padrão de PC de cada jogo, traduzidos para o botão equivalente no controle.
+const KBPAD_BUILTIN = {
+  'Padrão': kbpadPreset({}),
+  'GTA V': kbpadPreset({
+    A: 'ShiftLeft', X: 'Space', B: 'KeyR', Y: 'KeyF',
+    LB: 'Tab', RB: 'KeyQ', LT: 'Mouse2', RT: 'Mouse0',
+    L3: 'ControlLeft', R3: 'KeyC', Back: 'KeyV', Start: 'Enter',
+    Up: 'ArrowUp', Down: 'ArrowDown', Left: 'ArrowLeft', Right: 'ArrowRight', Home: 'KeyH'
+  }),
+  'Forza Horizon': kbpadPreset({
+    RT: 'KeyW', LT: 'KeyS', LSUp: '', LSDown: '', LSLeft: 'KeyA', LSRight: 'KeyD',
+    A: 'Space', Y: 'KeyR', B: 'KeyE', X: 'KeyQ',
+    RB: 'KeyC', LB: 'ShiftLeft', L3: 'KeyH', R3: 'KeyX',
+    Back: 'Tab', Start: 'Enter',
+    Up: 'ArrowUp', Down: 'ArrowDown', Left: 'ArrowLeft', Right: 'ArrowRight', Home: ''
+  }, { sensitivity: 8, smoothing: 60 }),
+  'Skyrim': kbpadPreset({
+    A: 'KeyE', B: 'Tab', X: 'KeyR', Y: 'Space',
+    LB: 'ShiftLeft', RB: 'KeyZ', LT: 'Mouse2', RT: 'Mouse0',
+    L3: 'ControlLeft', R3: 'KeyF', Back: 'KeyT', Start: 'Enter',
+    Up: 'KeyQ', Down: 'ArrowDown', Left: 'ArrowLeft', Right: 'ArrowRight', Home: 'KeyH'
+  }),
+  'EA FC / FIFA': kbpadPreset({
+    A: 'KeyK', B: 'KeyL', X: 'KeyJ', Y: 'KeyI',
+    LB: 'KeyQ', RB: 'KeyE', LT: 'Space', RT: 'ShiftLeft',
+    L3: 'KeyC', R3: 'KeyV', Back: 'Tab', Start: 'Enter',
+    Up: 'ArrowUp', Down: 'ArrowDown', Left: 'ArrowLeft', Right: 'ArrowRight', Home: 'KeyH'
+  }),
+  'Crimson Desert': kbpadPreset({
+    A: 'Space', B: 'ShiftLeft', X: 'KeyF', Y: 'KeyR',
+    LB: 'KeyQ', RB: 'Mouse0', LT: 'Mouse2', RT: 'KeyE',
+    L3: 'ControlLeft', R3: 'KeyC', Back: 'Tab', Start: 'Enter',
+    Up: 'Digit1', Down: 'Digit2', Left: 'Digit3', Right: 'Digit4', Home: 'KeyH'
+  })
+};
+
+async function kbpadLoad() {
+  const s = await chrome.storage.sync.get(['presets', 'active', 'toggleKey', 'config']);
+  const presets = s.presets || structuredClone(KBPAD_BUILTIN);
+  if (s.config && !s.presets) presets['Meu (antigo)'] = kbpadMerge(s.config);
+  const active = presets[s.active] ? s.active : 'Padrão';
+  return { presets, active, toggleKey: s.toggleKey || (s.config && s.config.toggleKey) || KBPAD_DEFAULTS.toggleKey };
+}
