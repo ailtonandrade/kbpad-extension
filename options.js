@@ -6,7 +6,7 @@ const label = (code) => (!code ? '— nenhum —' : MOUSE_NAMES[code] || code.re
 const cfg = () => state.presets[state.active];
 
 function save() {
-  chrome.storage.sync.set({ presets: state.presets, active: state.active, toggleKey: state.toggleKey }, () => {
+  chrome.storage.sync.set({ presets: state.presets, active: state.active, toggleKey: state.toggleKey, switchKey: state.switchKey, builtinVersion: KBPAD_BUILTIN_VERSION }, () => {
     const s = document.getElementById('status');
     s.textContent = chrome.runtime.lastError ? 'Erro: ' + chrome.runtime.lastError.message : 'Salvo';
     setTimeout(() => (s.textContent = ''), 1500);
@@ -14,12 +14,14 @@ function save() {
 }
 
 function getBinding(target) {
-  return target === '__toggle' ? state.toggleKey : cfg().bindings[target];
+  if (target === '__toggle') return state.toggleKey;
+  if (target === '__switch') return state.switchKey;
+  return cfg().bindings[target];
 }
 
 function setBinding(target, code) {
-  if (target === '__toggle') {
-    if (code) state.toggleKey = code;
+  if (target === '__toggle' || target === '__switch') {
+    if (code) state[target === '__toggle' ? 'toggleKey' : 'switchKey'] = code;
     return;
   }
   const b = cfg().bindings;
@@ -32,6 +34,13 @@ function render() {
   sel.innerHTML = '';
   for (const name of Object.keys(state.presets)) sel.add(new Option(name, name, false, name === state.active));
   sel.onchange = () => { state.active = sel.value; save(); render(); };
+  const alt = document.getElementById('alt');
+  alt.innerHTML = '';
+  alt.add(new Option('— nenhum —', ''));
+  for (const name of Object.keys(state.presets)) {
+    if (name !== state.active) alt.add(new Option(name, name, false, name === cfg().alt));
+  }
+  alt.onchange = () => { cfg().alt = alt.value; save(); };
   document.getElementById('delete').disabled = Object.keys(state.presets).length <= 1;
   document.getElementById('reset').textContent =
     KBPAD_BUILTIN[state.active] ? `Restaurar "${state.active}" de fábrica` : 'Restaurar padrão';
@@ -107,6 +116,7 @@ document.getElementById('rename').onclick = () => {
   if (!name || name === state.active || state.presets[name]) return;
   state.presets[name] = cfg();
   delete state.presets[state.active];
+  for (const p of Object.values(state.presets)) if (p.alt === state.active) p.alt = name;
   state.active = name;
   save();
   render();

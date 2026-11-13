@@ -79,7 +79,7 @@
     window.postMessage({ __kbpad: 'state', enabled: on }, '*');
     if (on) {
       fireGamepadEvent('gamepadconnected');
-      showHud(`🎮 KB Pad LIGADO — clique na tela para capturar o mouse (${cfg.toggleKey} desliga)`);
+      showHud(`🎮 KB Pad LIGADO — ${cfg.presetName} — clique na tela para capturar o mouse (${cfg.toggleKey} desliga)`);
     } else {
       if (document.pointerLockElement) document.exitPointerLock();
       fireGamepadEvent('gamepaddisconnected');
@@ -89,6 +89,10 @@
 
   function applyConfig(next) {
     cfg = next;
+    if (next.announce && enabled) {
+      down.clear();
+      showHud(`🔁 ${next.presetName}`);
+    }
     mapped = new Set(Object.values(cfg.bindings).filter(Boolean));
   }
 
@@ -104,6 +108,13 @@
       if (!e.repeat) setEnabled(!enabled);
       return;
     }
+    if (enabled && e.code === cfg.switchKey) {
+      swallow(e);
+      if (e.repeat) return;
+      if (cfg.altName) window.postMessage({ __kbpad: 'switch' }, '*');
+      else showHud(`"${cfg.presetName}" não tem preset de troca rápida`);
+      return;
+    }
     if (enabled && mapped.has(e.code)) {
       down.add(e.code);
       swallow(e);
@@ -112,7 +123,7 @@
 
   window.addEventListener('keyup', (e) => {
     if (!cfg) return;
-    if (e.code === cfg.toggleKey || (enabled && mapped.has(e.code))) {
+    if (e.code === cfg.toggleKey || (enabled && (e.code === cfg.switchKey || mapped.has(e.code)))) {
       down.delete(e.code);
       swallow(e);
     }

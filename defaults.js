@@ -44,7 +44,13 @@ const KBPAD_BUILTIN = {
     LB: 'Tab', RB: 'KeyQ', LT: 'Mouse2', RT: 'Mouse0',
     L3: 'ControlLeft', R3: 'KeyC', Back: 'KeyV', Start: 'Enter',
     Up: 'ArrowUp', Down: 'ArrowDown', Left: 'ArrowLeft', Right: 'ArrowRight', Home: 'KeyH'
-  }),
+  }, { alt: 'GTA V (veículos)' }),
+  'GTA V (veículos)': kbpadPreset({
+    RT: 'KeyW', LT: 'KeyS', LSUp: '', LSDown: '', LSLeft: 'KeyA', LSRight: 'KeyD',
+    RB: 'Space', LB: 'Mouse2', Y: 'KeyF', L3: 'KeyE', R3: 'KeyC', Back: 'KeyV',
+    A: 'ShiftLeft', X: 'KeyX', B: 'KeyR', Start: 'Enter',
+    Up: 'ArrowUp', Down: 'ArrowDown', Left: 'ArrowLeft', Right: 'ArrowRight', Home: 'KeyH'
+  }, { alt: 'GTA V' }),
   'Forza Horizon': kbpadPreset({
     RT: 'KeyW', LT: 'KeyS', LSUp: '', LSDown: '', LSLeft: 'KeyA', LSRight: 'KeyD',
     A: 'Space', Y: 'KeyR', B: 'KeyE', X: 'KeyQ',
@@ -72,10 +78,21 @@ const KBPAD_BUILTIN = {
   })
 };
 
+const KBPAD_BUILTIN_VERSION = 2;
+
 async function kbpadLoad() {
-  const s = await chrome.storage.sync.get(['presets', 'active', 'toggleKey', 'config']);
+  const s = await chrome.storage.sync.get(['presets', 'active', 'toggleKey', 'switchKey', 'builtinVersion', 'config']);
   const presets = s.presets || structuredClone(KBPAD_BUILTIN);
   if (s.config && !s.presets) presets['Meu (antigo)'] = kbpadMerge(s.config);
+  if (s.presets && (s.builtinVersion || 1) < 2) {
+    presets['GTA V (veículos)'] ??= structuredClone(KBPAD_BUILTIN['GTA V (veículos)']);
+    if (presets['GTA V'] && !presets['GTA V'].alt) presets['GTA V'].alt = 'GTA V (veículos)';
+  }
   const active = presets[s.active] ? s.active : 'Padrão';
-  return { presets, active, toggleKey: s.toggleKey || (s.config && s.config.toggleKey) || KBPAD_DEFAULTS.toggleKey };
+  return {
+    presets,
+    active,
+    toggleKey: s.toggleKey || (s.config && s.config.toggleKey) || KBPAD_DEFAULTS.toggleKey,
+    switchKey: s.switchKey || 'F9'
+  };
 }

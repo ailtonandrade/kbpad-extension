@@ -28,10 +28,12 @@
   <h2>Preset do jogo</h2>
   <div class="row"><select id="preset" style="flex:1;padding:6px"></select>
     <button id="new">Novo (cópia)</button><button id="rename">Renomear</button><button id="delete">Excluir</button></div>
-  <p class="hint">O preset selecionado é o que vale no jogo. Os de fábrica podem ser editados e restaurados.</p>
+  <div class="row"><label>Troca rápida para</label><select id="alt" style="flex:1;padding:6px"></select></div>
+  <p class="hint">O preset selecionado é o que vale no jogo. Com o KB Pad ligado, a tecla de troca rápida alterna entre ele e o preset de troca (ex.: GTA a pé ↔ veículos). Os de fábrica podem ser editados e restaurados.</p>
 
   <h2>Geral</h2>
-  <table><tbody><tr><td>Liga/desliga</td><td><button class="bind" data-target="__toggle"></button></td></tr></tbody></table>
+  <table><tbody><tr><td>Liga/desliga</td><td><button class="bind" data-target="__toggle"></button></td></tr>
+    <tr><td>Troca rápida de preset</td><td><button class="bind" data-target="__switch"></button></td></tr></tbody></table>
   <div class="row"><label>Sensibilidade do mouse</label><input type="range" id="sensitivity" min="1" max="60"><span id="sensitivity-v"></span></div>
   <div class="row"><label>Saída mínima (vence deadzone do jogo)</label><input type="range" id="deadzone" min="0" max="50"><span id="deadzone-v"></span></div>
   <div class="row"><label>Suavização</label><input type="range" id="smoothing" min="0" max="90"><span id="smoothing-v"></span></div>
