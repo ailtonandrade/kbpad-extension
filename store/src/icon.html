@@ -1,0 +1,18 @@
+<!doctype html>
+<html><head><meta charset="utf-8"></head>
+<body><pre id="out"></pre>
+<script>
+  // Rasteriza o SVG em canvas: o headless não tira screenshot de janelas menores que ~500px.
+  const img = new Image();
+  img.onload = () => {
+    const out = {};
+    for (const s of [16, 32, 48, 128]) {
+      const c = document.createElement('canvas');
+      c.width = c.height = s;
+      c.getContext('2d').drawImage(img, 0, 0, s, s);
+      out[s] = c.toDataURL('image/png');
+    }
+    document.getElementById('out').textContent = JSON.stringify(out);
+  };
+  img.src = '../icon.svg';
+</script></body></html>

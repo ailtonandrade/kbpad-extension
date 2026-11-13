@@ -2,7 +2,13 @@ let state = null;
 let waiting = null;
 
 const MOUSE_NAMES = { Mouse0: 'Mouse esquerdo', Mouse1: 'Mouse meio', Mouse2: 'Mouse direito', Mouse3: 'Mouse voltar', Mouse4: 'Mouse avançar' };
-const label = (code) => (!code ? '— nenhum —' : MOUSE_NAMES[code] || code.replace(/^Key|^Digit/, ''));
+const KEY_NAMES = {
+  Space: 'Espaço', ShiftLeft: 'Shift esq.', ShiftRight: 'Shift dir.', ControlLeft: 'Ctrl esq.', ControlRight: 'Ctrl dir.',
+  AltLeft: 'Alt esq.', AltRight: 'Alt dir.', ArrowUp: '↑', ArrowDown: '↓', ArrowLeft: '←', ArrowRight: '→',
+  Backquote: "'", Quote: '~', Enter: 'Enter', Tab: 'Tab'
+};
+const label = (code) =>
+  !code ? '— nenhum —' : MOUSE_NAMES[code] || KEY_NAMES[code] || code.replace(/^Key|^Digit|^Numpad/, '');
 const cfg = () => state.presets[state.active];
 
 function save() {
@@ -45,12 +51,13 @@ function render() {
   document.getElementById('reset').textContent =
     KBPAD_BUILTIN[state.active] ? `Restaurar "${state.active}" de fábrica` : 'Restaurar padrão';
 
-  const tbody = document.getElementById('bindings');
-  tbody.innerHTML = '';
+  const list = document.getElementById('bindings');
+  list.innerHTML = '';
   for (const [key, name] of KBPAD_TARGETS) {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${name}</td><td><button class="bind" data-target="${key}"></button></td>`;
-    tbody.appendChild(tr);
+    const div = document.createElement('div');
+    div.className = 'pair';
+    div.innerHTML = `<span>${name}</span><button class="bind" data-target="${key}"></button>`;
+    list.appendChild(div);
   }
   document.querySelectorAll('button.bind').forEach((btn) => {
     btn.textContent = label(getBinding(btn.dataset.target));
