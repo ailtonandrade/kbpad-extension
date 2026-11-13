@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>KB Pad - Configuração</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font: 14px system-ui, sans-serif; max-width: 720px; margin: 24px auto; padding: 0 16px; }
+  h1 { font-size: 20px; }
+  h2 { font-size: 16px; margin-top: 28px; }
+  table { width: 100%; border-collapse: collapse; }
+  td { padding: 6px 4px; border-bottom: 1px solid #8884; }
+  button.bind { min-width: 160px; padding: 6px 10px; cursor: pointer; font: inherit; }
+  button.bind.waiting { outline: 2px solid #3b82f6; }
+  .row { display: flex; align-items: center; gap: 12px; margin: 10px 0; }
+  .row label { width: 220px; }
+  .row input[type=range] { flex: 1; }
+  .hint { opacity: .7; }
+  #status { margin-left: 8px; opacity: .7; }
+</style>
+</head>
+<body>
+  <h1>🎮 KB Pad: teclado e mouse como controle</h1>
+  <p class="hint">Na página do jogo, aperte a tecla de ligar e clique na tela para capturar o mouse.
+    O mouse vira o analógico direito. Clique num botão abaixo e aperte a tecla ou o botão do mouse desejado.
+    Esc cancela, Backspace limpa.</p>
+
+  <h2>Geral</h2>
+  <table><tbody><tr><td>Liga/desliga</td><td><button class="bind" data-target="__toggle"></button></td></tr></tbody></table>
+  <div class="row"><label>Sensibilidade do mouse</label><input type="range" id="sensitivity" min="1" max="60"><span id="sensitivity-v"></span></div>
+  <div class="row"><label>Saída mínima (vence deadzone do jogo)</label><input type="range" id="deadzone" min="0" max="50"><span id="deadzone-v"></span></div>
+  <div class="row"><label>Suavização</label><input type="range" id="smoothing" min="0" max="90"><span id="smoothing-v"></span></div>
+  <div class="row"><label>Inverter eixo Y</label><input type="checkbox" id="invertY"></div>
+
+  <h2>Mapeamento</h2>
+  <table><tbody id="bindings"></tbody></table>
+
+  <p><button id="reset">Restaurar padrão</button><span id="status"></span></p>
+  <script src="defaults.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

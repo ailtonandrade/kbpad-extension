@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "KB Pad - Teclado e Mouse como Controle",
+  "version": "1.0.0",
+  "description": "Emula um controle (gamepad padrão) com teclado e mouse para jogos na nuvem no Chrome.",
+  "permissions": ["storage"],
+  "options_page": "options.html",
+  "action": { "default_title": "KB Pad - configurar" },
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["inject.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["defaults.js", "content.js"],
+      "run_at": "document_start"
+    }
+  ]
+}
