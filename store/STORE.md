@@ -105,8 +105,10 @@ https://github.com/ailtonandrade/kbpad-extension/blob/main/PRIVACY.md
 Na pasta da extensão, no PowerShell:
 
 ```powershell
-Compress-Archive -Force -DestinationPath store\kbpad-1.1.0.zip -Path manifest.json,background.js,content.js,defaults.js,i18n.js,inject.js,options.html,options.js,icons,_locales
+Add-Type -A System.IO.Compression, System.IO.Compression.FileSystem; $zip = "$PWD\store\kbpad-1.1.0.zip"; Remove-Item $zip -ErrorAction SilentlyContinue; $z = [IO.Compression.ZipFile]::Open($zip, 'Create'); $files = @('manifest.json','background.js','content.js','defaults.js','i18n.js','inject.js','options.html','options.js') + (Get-ChildItem icons,_locales -Recurse -File | ForEach-Object { Resolve-Path -Relative $_.FullName }); foreach ($f in $files) { $name = ($f -replace '^\.\\','') -replace '\\','/'; [void][IO.Compression.ZipFileExtensions]::CreateEntryFromFile($z, (Resolve-Path $f).Path, $name) }; $z.Dispose()
 ```
+
+Não use `Compress-Archive` do Windows PowerShell 5.1: ele grava os caminhos com `\` e a Web Store pode recusar o pacote.
 
 ## Imagens
 
